@@ -3,6 +3,8 @@ var router = express.Router();
 
 var pool = require('../db').pool
 
+const PAGE_SIZE = 2
+
 // Users
 //create user
 router.post('/user', (req, res) => {
@@ -21,12 +23,24 @@ router.post('/user', (req, res) => {
 })
 
 // fetch users
-router.get('/users', (req, res) => {
+router.get('/users/:page?', (req, res) => {
+  const pageNum = Number(req.params.page)
   pool.query('SELECT * FROM users;', [], (error, results) => {
+    // ultimately, if this query gets too slow, you could add the pagination
+    // to the query itself (serial, monotonically increasing keys lets you do
+    // this). However, overkill for now
     if (error) {
       throw error
     }
-    res.status(200).json(results.rows)
+    var retval = results.rows
+    if (isNaN(pageNum) == false) {
+      if (results.rows.length > PAGE_SIZE) {
+        startIndex = (PAGE_SIZE*(pageNum - 1))
+        retval = retval.slice(startIndex, startIndex+PAGE_SIZE)
+      }
+    }
+
+    res.status(200).json(retval)
   })
 })
 

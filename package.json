@@ -1,0 +1,19 @@
+{
+  "name": "friendsapi",
+  "version": "1.0.0",
+  "description": "UpKeep Friends API",
+  "main": "index.js",
+  "scripts": {
+    "create_tables": "node ./bin/create_tables.js",
+    "generate_data": "python3 ./bin/generate_data.py",
+    "seed_data": "node ./bin/seed_data.js",
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "rlg2161",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "7.14.0"
+  }
+}

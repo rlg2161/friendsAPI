@@ -5,7 +5,7 @@ CREATE TABLE users (
 	);
 
 CREATE TABLE friends (
-  id varchar (32) PRIMARY KEY,
+  id varchar (36) PRIMARY KEY,
   user_id int NOT NULL,
   friend_id int NOT NULL
   );

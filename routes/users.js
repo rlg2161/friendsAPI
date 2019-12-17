@@ -5,6 +5,23 @@ var pool = require('../db').pool
 
 console.log(pool)
 // Users
+
+//create user
+router.post('/user', (req, res) => {
+  user = req.body
+  console.log(user.user_id + " " + user.first_name + " " + user.last_name)
+  pool.query('INSERT INTO users (user_id,first_name,last_name) values ($1, $2, $3);', [Number(user.user_id), user.first_name, user.last_name],
+   (error, results) => {
+    if (error) {
+      if (error.message.includes("duplicate key")) {
+        res.status(400).json({"msg": "overwriting of record rejected"})
+      }
+    } else {
+      res.status(200).json({"msg": "successfully inserted user"})
+    }
+  })
+})
+
 // fetch users
 router.get('/users', (req, res) => {
   pool.query('SELECT * FROM users;', [], (error, results) => {
@@ -28,36 +45,6 @@ router.get('/user/:id', (req, res) => {
   })
 });
 
-router.post('/user', (req, res) => {
-  user = req.body
-  console.log(user.user_id + " " + user.first_name + " " + user.last_name)
-  pool.query('INSERT INTO users (user_id,first_name,last_name) values ($1, $2, $3);', [Number(user.user_id), user.first_name, user.last_name],
-   (error, results) => {
-    if (error) {
-      if (error.message.includes("duplicate key")) {
-        res.status(400).json({"msg": "overwriting of record rejected"})
-      }
-    } else {
-      res.status(200).json({"msg": "successfully inserted user"})
-    }
-  })
-})
-
-// router.get(`/users/:id`), (req, res) => {
-//
-//   const userId = Number(req.params.id)
-//   console.log("User_id: " + userId + " sent")
-//   res.send("User_id: " + userId + " sent")
-//   // client.query('SELECT * FROM users WHERE id = $1', [id], (error, results) => {
-//   //   if (error) {
-//   //     throw error
-//   //   }
-//   //   response.status(200).json(results.rows)
-//   // })
-// }
-
-// // create user
-// app.post('/user')
 // // delete user
 // app.delete('/user/{userId}')
 module.exports = router;

@@ -1,29 +1,40 @@
 var express = require('express');
 var router = express.Router();
 
-var client = require('../db')
+var pool = require('../db').pool
 
+console.log(pool)
 // Users
 // fetch users
 router.get('/users', (req, res) => {
   res.send('You should get a list of users back eventually')
 })
 
-router.get('/users/0', (req, res) => {
-  res.send("this is a test")
-})
-// // fetch single user
-
-router.get('/users/:id', (req, res) => {
+// fetch single user
+router.get('/user/:id', (req, res) => {
+  console.log(pool)
   const userId = Number(req.params.id)
   console.log("User_id: " + userId + " sent")
-  client.query('SELECT * FROM users WHERE id = $1', [id], (error, results) => {
+  pool.query('SELECT * FROM users WHERE id = $1', [userId], (error, results) => {
     if (error) {
       throw error
     }
     res.status(200).json(results.rows)
   })
 });
+
+router.post('/user', (req, res) => {
+  user = req.body
+
+  pool.query('INSERT INTO users VALUES ($1, $2, $3)', [user.user_id], [user.first_name], [user.last_name],
+   (error, results) => {
+    if (error) {
+      throw error
+    }
+    res.status(200).json(results.rows)
+  })
+  res.send("got it")
+})
 
 // router.get(`/users/:id`), (req, res) => {
 //

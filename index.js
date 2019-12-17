@@ -5,6 +5,7 @@ const port = 3000
 var users_routers = require('./routes/users');
 var friends_routers = require('./routes/friends');
 
+app.use(express.json())
 app.use('/', users_routers);
 // app.use('/', friends_routers);
 
@@ -14,4 +15,4 @@ app.use('/', users_routers);
 
 
 // fetch friends of friends
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.listen(port, () => console.log(`Friends API Listening on port ${port}`))

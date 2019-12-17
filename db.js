@@ -1,14 +1,15 @@
-const pg = require('pg');
 
-const client = new pg.Client({
+const { Pool } = require('pg')
+// pools will use environment variables
+// for connection information
+const pool = new Pool({
   user: 'upkeep',
   host: 'localhost',
   database: 'friendsAPI',
   password: 'secret',
   port: 5432,
-});
-client.connect();
+})
 
 module.exports = {
-  client //initialized postgres client
+  pool //initialized postgres client
 }

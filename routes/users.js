@@ -91,6 +91,32 @@ router.get('/user/:id/friends', (req, res) => {
   })
 });
 
+// fetch friends of friends of a single user
+router.get('/user/:id/fof', (req, res) => {
+  const userId = Number(req.params.id)
+  pool.query('WITH user_friends\
+    AS(\
+      SELECT friend_id\
+      FROM friends\
+      WHERE friends.user_id = $1\
+    )\
+    SELECT users.first_name, users.last_name\
+      FROM users\
+      INNER JOIN friends on users.user_id = friends.friend_id\
+    WHERE friends.user_id\
+      IN(\
+        SELECT friend_id\
+        FROM user_friends\
+      );', [userId], (error, results) => {
+    if (error) {
+      throw error
+    }
+    res.status(200).json(results.rows)
+  })
+})
+
+
+
 // // delete user
 // app.delete('/user/{userId}')
 module.exports = router;

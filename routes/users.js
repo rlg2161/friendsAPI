@@ -80,7 +80,10 @@ router.get('/user/:id/friends', (req, res) => {
   console.log(pool)
   const userId = Number(req.params.id)
   console.log("Friend_id: " + userId + " sent")
-  pool.query('SELECT * FROM friends WHERE user_id = $1;', [userId], (error, results) => {
+  pool.query('SELECT friends.user_id, users.first_name, users.last_name\
+    FROM users\
+    INNER JOIN friends on users.user_id = friends.friend_id\
+    WHERE friends.user_id=$1;', [userId], (error, results) => {
     if (error) {
       throw error
     }

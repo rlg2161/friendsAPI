@@ -2,37 +2,11 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-const pg = require('pg');
+var users_routers = require('./routes/users');
+var friends_routers = require('./routes/friends');
 
-const client = new pg.Client({
-  user: 'upkeep',
-  host: 'localhost',
-  database: 'friendsAPI',
-  password: 'secret',
-  port: 5432,
-});
-client.connect();
-
-console.log(client)
-
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
-
-app.get('/', (req, res) => res.send('Hello World!'))
-
-// Routes
-
-// Users
-// fetch users
-app.get('/users', (req, res) => {
-  res.send('You should get a list of users back eventually')
-})
-// // fetch single user
-// app.get('/user/{userId}')
-// // create user
-// app.post('/user')
-// // delete user
-// app.delete('/user/{userId}')
-
+app.use('/', users_routers);
+// app.use('/', friends_routers);
 
 
 // Friends
@@ -40,3 +14,4 @@ app.get('/users', (req, res) => {
 
 
 // fetch friends of friends
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))

@@ -8,9 +8,10 @@ const PAGE_SIZE = 10
 // Users
 //create user
 router.post('/user', (req, res) => {
-  user = req.body
-  console.log(user.first_name + " " + user.last_name)
-  pool.query('INSERT INTO users (user_id,first_name,last_name) values (nextval(\'users_user_id_seq\'), $1, $2);', [user.first_name, user.last_name],
+  var user = req.body
+  pool.query('INSERT INTO users (user_id,first_name,last_name) \
+    values (nextval(\'users_user_id_seq\'), \
+    $1, $2);', [user.first_name, user.last_name],
    (error, results) => {
     if (error) {
       console.log(error)
@@ -24,31 +25,18 @@ router.post('/user', (req, res) => {
 // fetch users
 router.get('/users/:page?', (req, res) => {
   const pageNum = Number(req.params.page)
-  pool.query('SELECT * FROM users;', [], (error, results) => {
-    // ultimately, if this query gets too slow, you could add the pagination
-    // to the query itself (serial, monotonically increasing keys lets you do
-    // this). However, overkill for now
+  pool.query(composeSelectUsersQuery(pageNum, PAGE_SIZE), [], (error, results) => {
     if (error) {
       console.log(error)
       res.status(500).json({"error": "Failed to retrieve users: " + error.message})
     }
-    var retval = results.rows
-    if (isNaN(pageNum) == false) {
-      if (results.rows.length > PAGE_SIZE) {
-        startIndex = (PAGE_SIZE*(pageNum - 1))
-        retval = retval.slice(startIndex, startIndex+PAGE_SIZE)
-      }
-    }
-
-    res.status(200).json(retval)
+    res.status(200).json(results.rows)
   })
 })
 
 // fetch single user
 router.get('/user/:id', (req, res) => {
-  console.log(pool)
   const userId = Number(req.params.id)
-  console.log("userId: " + userId + " sent")
   pool.query('SELECT * FROM users WHERE user_id = $1;', [userId], (error, results) => {
     if (error) {
       console.log(error)
@@ -66,11 +54,11 @@ router.get('/user/:id', (req, res) => {
 // Friends
 //create friend
 router.post('/user/:id/friend', (req, res) => {
-  friendship = req.body
-  console.log("Friendship: " + " " + friendship.user_id + " " + friendship.friend_id)
+  const friendship = req.body
   pool.query('INSERT INTO friends \
     (id,user_id,friend_id)\
-    values (nextval(\'friends_id_seq\'), $1, $2);', [Number(friendship.user_id), Number(friendship.friend_id)],
+    values (nextval(\'friends_id_seq\'), $1, $2);',
+    [Number(friendship.user_id), Number(friendship.friend_id)],
    (error, results) => {
     if (error) {
       console.log(error)
@@ -83,9 +71,7 @@ router.post('/user/:id/friend', (req, res) => {
 
 // fetch friends of a single user
 router.get('/user/:id/friends', (req, res) => {
-  console.log(pool)
   const userId = Number(req.params.id)
-  console.log("Friend_id: " + userId + " sent")
   pool.query('SELECT users.first_name, users.last_name\
     FROM users\
     INNER JOIN friends on users.user_id = friends.friend_id\
@@ -116,10 +102,23 @@ router.get('/user/:id/fof', (req, res) => {
       );', [userId], (error, results) => {
     if (error) {
       console.log(error)
-      res.status(500).json({"error": `Failed to retrieve friends of friends for ${userId}: ` + error.message})
+      res.status(500).json({"error": `Failed to retrieve friends of friends \
+        for ${userId}: ` + error.message})
     }
     res.status(200).json(results.rows)
   })
 })
+
+function composeSelectUsersQuery(page, page_size) {
+  var queryString = "SELECT * FROM users"
+  const queryTerminator = ";"
+  if (isNaN(page) == false && page != 0) {// If you query for page 0; you get the full set back
+    const start = (page-1) * page_size +1
+    const end = page*page_size
+    const paginator = ` WHERE user_id BETWEEN ${start} AND ${end}`
+    queryString = queryString + paginator
+  }
+  return queryString + queryTerminator
+}
 
 module.exports = router;

@@ -7,10 +7,4 @@ var users_routers = require('./routes/users');
 app.use(express.json())
 app.use('/', users_routers);
 
-
-// Friends
-// fetch friends of users
-
-
-// fetch friends of friends
 app.listen(port, () => console.log(`Friends API Listening on port ${port}`))

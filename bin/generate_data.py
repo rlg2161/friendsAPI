@@ -9,6 +9,8 @@ from datetime import datetime
 first_name_list = []
 last_name_list = []
 
+NUM_USERS = 100
+
 with open('./data/raw/baby_name_list.tsv', 'r') as f:
     for line in f:
         split_line = line.split("\t")
@@ -24,9 +26,8 @@ random.seed(datetime.now())
 
 users_list = []
 
-for i in range(500):
+for i in range(NUM_USERS):
     user = {}
-    user['user_id'] = i + 1 # this gets us user_id's of 1-500 (instead of 0-499)
     user['first_name'] = first_name_list[random.randint(0, len(first_name_list) - 1)]
     user['last_name'] = last_name_list[random.randint(0, len(last_name_list) - 1)]
 
@@ -34,13 +35,12 @@ for i in range(500):
 
 
 friends_list = []
-for user in users_list:
-    # arbitrarily a user can have up to 100 friends and everyone has at least one
-    for i in range(random.randint(1, 100)):
+for user_index, user in enumerate(users_list):
+    # arbitrarily a user can have up to 10 friends and everyone has at least one
+    for i in range(random.randint(1, 10)):
         friendship = {}
-        friendship["id"] = str(uuid.uuid4())
-        friendship["user_id"] = user['user_id']
-        friendship["friend_id"] = random.randint(1, 500) # user_id's are one indexed so we have to offset by one
+        friendship["user_id"] = user_index + 1 # user_id's are one indexed so we have to offset by one
+        friendship["friend_id"] = random.randint(1, NUM_USERS) # user_id's are one indexed so we have to offset by one
 
         friends_list.append(friendship)
 

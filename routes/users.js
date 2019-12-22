@@ -15,9 +15,11 @@ router.post('/user', (req, res) => {
    (error, results) => {
     if (error) {
       console.log(error)
-      res.status(500).json({"error": "Failed to insert record: " + error.message})
+      res.status(500).json({"error": `Failed to insert record:
+        ${error.message}`})
     } else {
-      res.status(200).json({"msg": "successfully inserted user: " + user.first_name + " " + user.last_name})
+      res.status(200).json({"msg": `successfully inserted user:
+        ${user.first_name} ${user.last_name}`})
     }
   })
 })
@@ -25,29 +27,33 @@ router.post('/user', (req, res) => {
 // fetch users
 router.get('/users/:page?', (req, res) => {
   const pageNum = Number(req.params.page)
-  pool.query(composeSelectUsersQuery(pageNum, PAGE_SIZE), [], (error, results) => {
-    if (error) {
-      console.log(error)
-      res.status(500).json({"error": "Failed to retrieve users: " + error.message})
-    }
-    res.status(200).json(results.rows)
-  })
+  pool.query(composeSelectUsersQuery(pageNum, PAGE_SIZE), [],
+    (error, results) => {
+      if (error) {
+        console.log(error)
+        res.status(500).json({"error": `Failed to retrieve users: \
+          ${error.message}`})
+      }
+      res.status(200).json(results.rows)
+    })
 })
 
 // fetch single user
 router.get('/user/:id', (req, res) => {
   const userId = Number(req.params.id)
-  pool.query('SELECT * FROM users WHERE user_id = $1;', [userId], (error, results) => {
-    if (error) {
-      console.log(error)
-      res.status(500).json({"error": `Failed to retrieve user ${userId}: ${error.message}`})
-    }
-    if (results.rows.length == 1) {
-      res.status(200).json(results.rows[0])
-    } else {
-      res.status(200).json({})
-    }
-  })
+  pool.query('SELECT * FROM users WHERE user_id = $1;',
+    [userId], (error, results) => {
+      if (error) {
+        console.log(error)
+        res.status(500).json({"error": `Failed to retrieve user \
+          ${userId}: ${error.message}`})
+      }
+      if (results.rows.length == 1) {
+        res.status(200).json(results.rows[0])
+      } else {
+        res.status(200).json({})
+      }
+    })
 });
 
 // Friends
@@ -61,7 +67,8 @@ router.post('/user/:id/friend', (req, res) => {
    (error, results) => {
     if (error) {
       console.log(error)
-      res.status(500).json({"error": "Failed to insert record: " + error.message})
+      res.status(500).json({"error": `Failed to insert record:\
+        ${error.message}`})
     } else {
       res.status(200).json({"msg": "successfully inserted friendship"})
     }

@@ -157,7 +157,7 @@ deterministically). The are not supposed to hit any outside resources - those th
 be mocked. This helps to ensure that unit tests run quickly and that your test suite will not fail
 do to an issue out of your control (ex: test database is down).
 
-For this particular application, I do not believe there is all that much to test as is.
+For this particular application, I do not believe there is all that much to unit test as is.
 Baseline postgres functionality is well documented and maintained in the official postgres package
 `pg` -- it would not be beneficial for us to write our own tests wrapping the connection pool
 to ensure that it works for example.
@@ -192,19 +192,23 @@ and prevent issues from being deployed to production.
 
 In this case, an integration test might include:
 1) standing up the app && the db
-2) indexing 5 friends and 50 friendships
+2) indexing 5 users and 10 friendships (out of a possible 20)
 3) ensuring that the 5 friend lists are correct
 4) ensuring that one friend-of-friend list is correct
 
 This test would take quite a bit longer to run than the unit test, but it gives you confidence that
 all the interface layers of your app (http <-> api; api <-> db) are working correctly.
 
-
 ### Dockerfile
 
 Given more time, I would package this application up in a Dockerfile (as well as include tooling
 for the docker toolchain using `make`). This would simplify the application orchestration and allow
 you to launch both postgres and the application via docker-compose for example.
+
+### Config and Logging
+
+For a production level app, I would also want to add config files and handling as well as an actual
+logger (as opposed to just writing to stdout).
 
 ## Notes
 

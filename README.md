@@ -12,7 +12,7 @@ Startup:
   To download the relevant node packages for the api:
     `npm install`
   To stand up and initialize the database:
-    `npm run init-postgres`
+    `./bin/init_postgres.sh`
   To run the api:
     `npm run api`
   To generate and insert the data:

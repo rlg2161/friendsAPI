@@ -15,11 +15,9 @@ router.post('/user', (req, res) => {
    (error, results) => {
     if (error) {
       console.log(error)
-      res.status(500).json({"error": `Failed to insert record:
-        ${error.message}`})
+      res.status(500).json({"error": `Failed to insert record: ${error.message}`})
     } else {
-      res.status(200).json({"msg": `successfully inserted user:
-        ${user.first_name} ${user.last_name}`})
+      res.status(200).json({"msg": `successfully inserted user: ${user.first_name} ${user.last_name}`})
     }
   })
 })
@@ -31,8 +29,7 @@ router.get('/users/:page?', (req, res) => {
     (error, results) => {
       if (error) {
         console.log(error)
-        res.status(500).json({"error": `Failed to retrieve users: \
-          ${error.message}`})
+        res.status(500).json({"error": `Failed to retrieve users: ${error.message}`})
       }
       res.status(200).json(results.rows)
     })
@@ -45,8 +42,7 @@ router.get('/user/:id', (req, res) => {
     [userId], (error, results) => {
       if (error) {
         console.log(error)
-        res.status(500).json({"error": `Failed to retrieve user \
-          ${userId}: ${error.message}`})
+        res.status(500).json({"error": `Failed to retrieve user ${userId}: ${error.message}`})
       }
       if (results.rows.length == 1) {
         res.status(200).json(results.rows[0])
@@ -67,8 +63,7 @@ router.post('/user/:id/friend', (req, res) => {
    (error, results) => {
     if (error) {
       console.log(error)
-      res.status(500).json({"error": `Failed to insert record:\
-        ${error.message}`})
+      res.status(500).json({"error": `Failed to insert record: ${error.message}`})
     } else {
       res.status(200).json({"msg": "successfully inserted friendship"})
     }
@@ -109,7 +104,7 @@ router.get('/user/:id/fof', (req, res) => {
     if (error) {
       console.log(error)
       res.status(500).json({"error": `Failed to retrieve friends of friends \
-        for ${userId}: ` + error.message})
+        for ${userId}: ${error.message}`})
     }
     res.status(200).json(results.rows)
   })

@@ -187,7 +187,7 @@ to ensure that it works for example.
 
 Additionally, one might be inclined to test the api to ensure that API payloads are received correctly.
 However, this functionality is baked into `express`, one of the most popular projects in the node
-ecosystem. We should leave testing of these properties to the express package.
+ecosystem. We should leave testing of these capabilities to the express package.
 
 Consequently, the main functionality we have added to this app is the pagination on the users endpoint.
 I have extracted this behavior into the `composeSelectUsersQuery` function for both code cleanliness

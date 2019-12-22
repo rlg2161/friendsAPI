@@ -128,6 +128,24 @@ command line and prefer to use CLI tools.
 
 ## Future Improvements
 
+### Hardening API
+
+Like all real world applications, this friends API would eventually run into some bad requests that
+it was not equipped to handle. Although the API *should* not fall over when it receives bad data,
+it may not handle it particularly gracefully. For a production API, I would invest some time in
+hardening the API to ensure correct behavior when it receives inputs it is not expecting. This
+includes verbose error messaging to help clients understand what their errors are.
+
+### Prevention of duplicates
+
+Because this app is very bare-bones, it does not have any functionality to handle duplicates; they
+will simply be indexed in the db with a new id. Ideally, a given user would not be able to exist
+multiple times in the same table and a given friendship should not be stored multiple times. I would
+achieve this by adding uniqueness properties to the table to ensure that a given user (aka first_name +
+last_name) or friendship is only represented one time. (NB: In the real world this would be more
+complicated as human names are themselves not unique - so you would want a more complicated pattern
+than the above).
+
 ### Testing
 
 Testing is crucial for any production application - I would not consider a project "production-ready"
@@ -155,7 +173,7 @@ us to keep our test suites DRY and encapsulated to code that we can control and 
 Unit tests are supposed to test a particular function to ensure that it behaves correctly (and
 deterministically). The are not supposed to hit any outside resources - those that are required can
 be mocked. This helps to ensure that unit tests run quickly and that your test suite will not fail
-do to an issue out of your control (ex: test database is down).
+due to an issue out of your control (ex: test database is down).
 
 For this particular application, I do not believe there is all that much to unit test as is.
 Baseline postgres functionality is well documented and maintained in the official postgres package
@@ -196,8 +214,9 @@ In this case, an integration test might include:
 3) ensuring that the 5 friend lists are correct
 4) ensuring that one friend-of-friend list is correct
 
-This test would take quite a bit longer to run than the unit test, but it gives you confidence that
-all the interface layers of your app (http <-> api; api <-> db) are working correctly.
+This test would take quite a bit longer to run than the unit test (though it would still be quick in
+human time), but it gives you confidence that all the interface layers of your app
+(http <-> api; api <-> db) are working correctly.
 
 ### Dockerfile
 

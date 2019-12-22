@@ -1,21 +1,26 @@
 ## Instructions
 
 Requirements:
-  Node v12.13.1 (latest language version release with NPM support when project was started)
-  Python3 (for data generation)
-  Docker (api/scripts assuming Docker for Mac networking (aka postgres accessible over localhost))
-    - If docker is not installed, app will work with a locally running instance of postgres. However,
+  - Node v12.13.1 (latest language version release with NPM support when project was started)
+  - Python3 (for data generation)
+  - Docker (api/scripts assuming Docker for Mac networking (aka postgres accessible over localhost))
+
+    -- If docker is not installed, app will work with a locally running instance of postgres. However,
       startup scripts assume Postgres is running in docker
-  Docker-Compose v3
+  - Docker-Compose v3
 
 Startup:
-  To download the relevant node packages for the api:
+  - To download the relevant node packages for the api:
+
     `npm install`
-  To stand up and initialize the database:
+  - To stand up and initialize the database:
+
     `./bin/init_postgres.sh`
-  To run the api:
+  - To run the api:
+
     `npm run api`
-  To generate and insert the data:
+  - To generate and insert the data:
+
     `./bin/insert_data.py`
 
 Scripts contain relative paths, so all scripts should be run from the main directory of the app.

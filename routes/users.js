@@ -40,7 +40,7 @@ router.get('/user/:id', (req, res) => {
   pool.query('SELECT * FROM users WHERE user_id = $1;', [userId], (error, results) => {
     if (error) {
       console.log(error)
-      res.status(500).json({"error": `Failed to retrieve user ${userId}: ` + error.message})
+      res.status(500).json({"error": `Failed to retrieve user ${userId}: ${error.message}`})
     }
     if (results.rows.length == 1) {
       res.status(200).json(results.rows[0])
@@ -50,7 +50,6 @@ router.get('/user/:id', (req, res) => {
   })
 });
 
-// create friendship
 // Friends
 //create friend
 router.post('/user/:id/friend', (req, res) => {

@@ -4,7 +4,7 @@ We want you to start an API Server that could be used for a social media website
 
 Core Features:
 - Using a relational database (MySQL, Postgres), create the schema needed for users and to model the friend relationship
-- Keep the user model simple! Id, firstName, and lastName are perfect
+  - Keep the user model simple! Id, firstName, and lastName are perfect
 - Create an API Endpoint for fetching users with basic pagination
 - Create an API Endpoint for fetching a user’s friends
 - Create an API Endpoint for fetching a user’s friends of friends

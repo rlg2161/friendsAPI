@@ -1,3 +1,4 @@
 #!/bin/bash
-./bin/send_users.sh
-./bin/send_friendships.sh
+python3 ./bin/generate_data.py
+./bin/insert_users.sh
+./bin/insert_friendships.sh

@@ -19,9 +19,9 @@ Startup:
   - To run the api:
 
     `npm run api`
-  - To generate and insert the data:
+  - To generate and insert the data (in a new terminal window):
 
-    `./bin/insert_data.py`
+    `./bin/insert_data.sh`
 
 Scripts contain relative paths, so all scripts should be run from the main directory of the app.
 
